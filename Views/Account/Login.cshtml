@@ -1,0 +1,80 @@
+@model string
+
+return url : @Model   <br>   
+
+<a href="/account/loginasync"> Login </a> <br>    
+<a href="/account/logoutasync"> Logout</a> <br>
+
+<a href="/account/GetTestOne"> GetTestOne </a><br>
+<a href="/account/GetTestTwo"> GetTestTwo </a>
+
+<div id="fb-root"></div>
+
+<fb:login-button scope="public_profile,email" data-size="large" data-auto-logout-link="true" onlogin="checkLoginState();">
+</fb:login-button>
+<script>
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      :  '533982070312614',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v2.11'
+    });
+      
+    FB.AppEvents.logPageView();    
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+    function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+            console.log(response);
+        });
+}
+</script>
+
+<!--  
+<fb:login-button 
+  scope="public_profile,email"
+  onlogin="checkLoginState();">
+</fb:login-button>
+
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      :  '533982070312614',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v2.11'
+    });
+      
+    FB.AppEvents.logPageView();   
+      
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+  
+function checkLoginState() {
+  FB.getLoginStatus(function(response) {
+ console.log(response);
+  });
+}
+
+</script>
+ 
+  -->
