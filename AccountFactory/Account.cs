@@ -21,40 +21,39 @@ public class Account : IAccount
 
     public void Process(Action<CustomOptions> options)
     {
-        options = (x) =>
-        {
-            _custom.SetParameters(x);
-        };
+        var customOptions = new CustomOptions();
+        options(customOptions);
 
+        _custom.SetParameters(customOptions); 
         _custom.Process();
         _user = _custom.GetUser;
         _result = _custom.Result;
     }
 
     public void Process(Action<FacebookOptions> options)
-    {
-        options = (x) =>
-        {
-            _facebook.SetParameters(x);
-        };
+    { 
+        var facebookOptions = new FacebookOptions();
+        options(facebookOptions);
 
+        _facebook.SetParameters(facebookOptions);
         _facebook.Process();
+
         _user = _facebook.GetUser;
         _result = _facebook.Result;
     }
 
     public void Process(Action<TwitterOptions> options)
     {
-        options = (x) =>
-        {
-            _twitter.SetParameters(x);
-        };
+        var twitterOptions = new TwitterOptions();
+        options(twitterOptions);
+
+        _twitter.SetParameters(twitterOptions);
 
         _twitter.Process();
         _user = _twitter.GetUser;
         _result = _twitter.Result;
     }
-    public bool IsFailed { get => _result.status == StatusEnum.Error; } 
+    public bool IsFailed { get => _result.status == StatusEnum.Error; }
     public User GetUser => _user;
     public (StatusEnum status, IList<string> messages) Result => _result;
 }
