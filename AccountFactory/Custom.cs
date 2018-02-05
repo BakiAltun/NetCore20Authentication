@@ -12,8 +12,8 @@ public class Custom : ICustom
  
 
     public void Process(CustomOptions options)
-    {
-        _messages.Add("");
+    {  
+        _messages = new List<string>();
         _status = StatusEnum.Success;
 
         throw new System.NotImplementedException();

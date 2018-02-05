@@ -41,17 +41,7 @@ namespace NetCore20Auth
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(AuthorizeEnum.View,
-                        policy => policy.Requirements.Add(new LoggingAuthorizationRequirement()));
-                options.AddPolicy(AuthorizeEnum.New,
-                        policy => policy.Requirements.Add(new LoggingAuthorizationRequirement()));
-                options.AddPolicy(AuthorizeEnum.Edit,
-                        policy => policy.Requirements.Add(new LoggingAuthorizationRequirement()));
-                options.AddPolicy(AuthorizeEnum.Delete,
-                        policy => policy.Requirements.Add(new LoggingAuthorizationRequirement()));
-                options.AddPolicy(AuthorizeEnum.Save,
-                        policy => policy.Requirements.Add(new LoggingAuthorizationRequirement()));
-
-                //policy adding here
+                        policy => policy.Requirements.Add(new LoggingAuthorizationRequirement())); 
             });
 
             services.AddMvc(options =>
@@ -65,7 +55,8 @@ namespace NetCore20Auth
 
 
             // services.AddSingleton<IAuthorizationHandler, LoggingAuthorizationHandler>();
-            services.AddScoped<IAccountManager, AccountManager>();
+            services.AddScoped<ISignManager, SignManager>();
+            services.AddSingleton<IHttpContextAccessor>();
 
             //services
             services.AddSingleton<IUserService, UserService>();

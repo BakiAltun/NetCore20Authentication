@@ -1,23 +1,27 @@
 using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+using System.Collections.Generic;
+
 namespace NetCore20Auth
 {
     //no singleton,transistEE
-    public class AccountManager : IAccountManager
+    public class SignManager : ISignManager
     {
-        private readonly HttpContext _httpContext;
-        
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         private readonly IUserService _userService;
 
-        public AccountManager(HttpContext httpContext, IUserService userService)
+        public  SignManager(IHttpContextAccessor httpContextAccessor, IUserService userService)
         {
-            _httpContext = httpContext;
+            _httpContextAccessor = httpContextAccessor;
             _userService = userService;
         }
-        
+
         public User CurrentUser()
-        { 
+        {
             return _userService.GetById(0);
         }
 
@@ -33,16 +37,28 @@ namespace NetCore20Auth
 
         public void SignIn(User userEntity)
         {
-            throw new NotImplementedException();
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, "Baki"),
+                new Claim(ClaimTypes.Surname, "Altun"),
+                new Claim("IsPublic", Boolean.FalseString )
+            };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
         }
 
         public void SignOut()
         {
-            _httpContext.SignOutAsync();
+            _httpContextAccessor.HttpContext.SignOutAsync();
         }
     }
 
-    public interface IAccountManager
+    public interface ISignManager
     {
         void SignIn(User entity);
         void SignOut();

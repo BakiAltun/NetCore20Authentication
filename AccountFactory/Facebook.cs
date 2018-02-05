@@ -13,7 +13,8 @@ public class Facebook : IFacebook
     public void Process(FacebookOptions options)
     {
         _options = options;
-        
+        _messages = new List<string>();
+        _user = new User();
         throw new System.NotImplementedException();
     }
 

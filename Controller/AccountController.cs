@@ -13,8 +13,13 @@ namespace NetCore20Auth
     public class AccountController : Controller
     {
         private readonly IAccount _account;
-        private readonly SignInManager<User> _signinManager;
-        private readonly IAccountManager _accountManager;
+        private readonly ISignManager _signManager;
+
+        public AccountController(ISignManager signManager, IAccount account)
+        {
+            _signManager = signManager;
+            _account = account;
+        }
 
         [AllowAnonymous]
         public IActionResult Login(string returnUrl)
@@ -25,20 +30,19 @@ namespace NetCore20Auth
 
         [AllowAnonymous]
         public async Task<IActionResult> LoginAsync(string userName, string password)
-        {
-            var claims = new Claim[]
+        { 
+            _account.Process(options =>
             {
-                new Claim(ClaimTypes.Name,"baki"),
-                new Claim(ClaimTypes.Surname,"altun"),
-                new Claim(ClaimTypes.Role, string.Join(",", new[] {1,2,3})),
-                new Claim(ClaimTypes.Email,"mail@mailinator.com")
-            };
+                options.UserName = userName;
+                options.Password = password;
+            });
 
-            var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            if (_account.IsFailed)
+                return Json(_account.Result); //show message
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
+            _signManager.SignIn(_account.GetUser);
 
-            return new ObjectResult(value: (object)(new { result = "Success", CookieAuthenticationDefaults.AuthenticationScheme }));
+            return RedirectToAction("Login", new { returnUrl = "email" }); 
         }
 
         public async Task<IActionResult> LogoutAsync()
@@ -51,13 +55,13 @@ namespace NetCore20Auth
         [Authorize]
         public string GetTestOne()
         {
-            return "Login Başararılı";
+            return "Login Success";
         }
 
         [AllowAnonymous]
         public string GetTestTwo()
         {
-            return "Loginsiz Giriş";
+            return "Welcome Visitor";
         }
 
         [AllowAnonymous]
@@ -72,7 +76,7 @@ namespace NetCore20Auth
             if (_account.IsFailed)
                 return Json(_account.Result); //show message
 
-            _accountManager.SignIn(_account.GetUser);
+            _signManager.SignIn(_account.GetUser);
 
             return RedirectToAction("Login", new { returnUrl = "email" });
         }
@@ -89,13 +93,14 @@ namespace NetCore20Auth
             if (_account.IsFailed)
                 return Json(_account.Result); //show message
 
-            _accountManager.SignIn(_account.GetUser);
+            _signManager.SignIn(_account.GetUser);
 
             return RedirectToAction("Login", new { returnUrl = "email" });
         }
 
         [AllowAnonymous]
-        public ActionResult CustomSigning(string userName, string password)
+        [HttpPost]
+        public ActionResult Signing(string userName, string password)
         {
             _account.Process(options =>
             {
@@ -105,8 +110,8 @@ namespace NetCore20Auth
 
             if (_account.IsFailed)
                 return Json(_account.Result); //show message
-                
-            _accountManager.SignIn(_account.GetUser);
+
+            _signManager.SignIn(_account.GetUser);
 
             return RedirectToAction("Login", new { returnUrl = "email" });
         }
