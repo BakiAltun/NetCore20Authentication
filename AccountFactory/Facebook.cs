@@ -9,14 +9,11 @@ public class Facebook : IFacebook
     private User _user;
     private IList<string> _messages;
     private StatusEnum _status;
-
-    public void SetParameters(FacebookOptions options)
+ 
+    public void Process(FacebookOptions options)
     {
         _options = options;
-    }
-
-    public void Process()
-    {
+        
         throw new System.NotImplementedException();
     }
 
@@ -29,8 +26,7 @@ public interface IFacebook
     User GetUser { get; }
 
     (StatusEnum status, IList<string> messages) Result { get; }
-
-    void SetParameters(FacebookOptions options);
+ 
     
-    void Process();
+    void Process(FacebookOptions options);
 }

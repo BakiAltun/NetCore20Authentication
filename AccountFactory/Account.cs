@@ -24,8 +24,8 @@ public class Account : IAccount
         var customOptions = new CustomOptions();
         options(customOptions);
 
-        _custom.SetParameters(customOptions); 
-        _custom.Process();
+ 
+        _custom.Process(customOptions);
         _user = _custom.GetUser;
         _result = _custom.Result;
     }
@@ -35,8 +35,8 @@ public class Account : IAccount
         var facebookOptions = new FacebookOptions();
         options(facebookOptions);
 
-        _facebook.SetParameters(facebookOptions);
-        _facebook.Process();
+    
+        _facebook.Process(facebookOptions);
 
         _user = _facebook.GetUser;
         _result = _facebook.Result;
@@ -46,10 +46,9 @@ public class Account : IAccount
     {
         var twitterOptions = new TwitterOptions();
         options(twitterOptions);
+ 
+        _twitter.Process(twitterOptions);
 
-        _twitter.SetParameters(twitterOptions);
-
-        _twitter.Process();
         _user = _twitter.GetUser;
         _result = _twitter.Result;
     }

@@ -9,14 +9,9 @@ public class Custom : ICustom
     private User _user;
     private IList<string> _messages;
     private StatusEnum _status;
+ 
 
-    public void SetParameters(CustomOptions options)
-    {
-        _options = options;
-        _messages = new List<string>();
-    }
-
-    public void Process()
+    public void Process(CustomOptions options)
     {
         _messages.Add("");
         _status = StatusEnum.Success;
@@ -33,8 +28,6 @@ public interface ICustom
     User GetUser { get; }
 
     (StatusEnum status, IList<string> messages) Result { get; }
-
-    void SetParameters(CustomOptions options);
-
-    void Process();
+ 
+    void Process(CustomOptions options);
 }

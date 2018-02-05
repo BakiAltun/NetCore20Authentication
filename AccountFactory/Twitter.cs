@@ -10,14 +10,11 @@ public class Twitter : ITwitter
     private IList<string> _messages;
     private StatusEnum _status;
 
-    public void SetParameters(TwitterOptions options)
+ 
+    public void Process(TwitterOptions options)
     {
         _options = options;
-        _messages = new List<string>();
-    }
-
-    public void Process()
-    {
+        
         throw new System.NotImplementedException();
     }
 
@@ -28,7 +25,6 @@ public class Twitter : ITwitter
 public interface ITwitter
 {
     User GetUser { get; } 
-    (StatusEnum status, IList<string> message) Result { get; } 
-    void SetParameters(TwitterOptions options);
-    void Process();
+    (StatusEnum status, IList<string> message) Result { get; }  
+    void Process(TwitterOptions options);
 }
